@@ -1,0 +1,134 @@
+Jenkins:
+Jenkins is an open source automation server written in java , jenkins helps to automate
+The non-human part of software development process, with continues integration 
+And facilitating technical aspect of continuous delivery
+Jenkins is facilitate the build and test the jobs 
+
+It is the process of automating the building and testing of code, each time one of the team 
+Member commits changes to version control
+Source Control (GIT)  Initiate CI Process  Build (Maven)  TestingReport
+          ↑
+ Development
+
+Jenkins: 
+Open source 
+Easy installation
+Easy configuration
+Rich plugin ecosystem
+Extensibility 
+Distributed build (Master-slave arch)
+
+AWS:
+Step1: Launch the EC2 instance and open the port 8080 in the security group that we attached to the EC2 instance. Because Jenkins is running on the 8080 port.
+Step2: connect to EC2 instance using putty 
+Step3:  install java 
+Go to root user 
+#sudo su –
+Then install java  
+# sudo amazon-linux-extras install java-openjdk11
+# yum install java* -y or apt install java* -y or sudo yum install java-11-openjdk
+To check version
+#java –version
+
+Step 4: Install Jenkins 
+https://www.jenkins.io/doc/book/installing/linux/#prerequisites
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum upgrade
+# Add required dependencies for the jenkins package
+sudo yum install Jenkins
+Restart the application
+#sudo systemctl daemon-reload
+To check status of Jenkins 
+#service Jenkins status
+To start Jenkins server
+#service Jenkins start
+Enable Jenkins - I restarted my system along with restarting Jenkins.When every shout is done by my PC, Jenkins shouts down.
+#systemctl enable Jenkins 
+
+
+Step5: to step up Jenkins 
+http://13.246.1.132:8088 in google search 
+once jenkins setup has been done 
+
+Step 6: Install git 
+Yum install git –y
+
+Step7: Install / setup maven
+Maven is build tool 
+https://maven.apache.org/download.cgi
+#cd /opt
+#wget https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+Unzip 
+#tar –xyzf apache-maven-3.9.6-bin.tar.gz
+Then rename it 
+#mv apache-maven-3.9.6 maven
+#cd maven 
+#cd bin/
+To check maven version 
+#./mvn –version
+
+./mvn command dependent on the path  , I don’t want this , 
+#echo $PATH
+I want to set this path variable to run the Maven global.
+Then go to root user
+#cd 
+To find java path 
+# find / -name java-11*
+/usr/lib/jvm/java-11-openjdk-11.0.21.0.9-1.amzn2.0.1.x86_64
+Then go to .bash_profile and will update 
+#nano .bash_profiles
+M2_HOME=/opt/maven
+M2=/opt/maven/bin	
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.21.0.9-1.amzn2.0.1.x86_64
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin:$JAVA_HOME:$M2_HOME:$M2
+
+export PATH
+
+then save it
+then restart the application using soruce  
+#source .bash_profiles 
+Then 
+#echo $PATH
+#pwd
+#mvn –version
+This is the process to run the maven globally or to run the maven anywhere 
+This is the first part to install the maven and then make them global and access anywhere 
+
+
+Step8:  install maven in Jenkins GUI 
+Then go to Jenkins GUI 
+Manage Jenkins  manage plugins -> avaible plugins 
+Search ---- maven
+Then install it 
+Then go to dash board  manage Jenkins  tools 
+Add JDK installation details 
+Name: JAVA_HOME
+JAVA_HOME=/usr/lib/java-11
+
+then Add maven Instalation 
+Name: mvn_home
+MAVEN_HOME: /opt/maven
+
+Then create maven project in maven in 5 minutes 
+Go to root then run below command 
+mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false
+
+Then check it 
+#tree my-app
+Then 
+#cd my_app
+Then 
+#mvn package 
+Then go back to root 
+# cd
+#tree my-app
+Then execute jar file 
+#cd my-app
+# java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App
+
+
