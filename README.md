@@ -4,6 +4,8 @@ Jenkins : it is process of automating the building and testing of code , each ti
  with continues integration and facilitating technical aspects of continues delivery
 
  Source code ---Initiate CI Process ---> build(Maven) ---->Test ---Report--->Development ----commit ---> Soruce code 
+ 
+ Jenkins is facilitate the build and test the jobs 
 
  
 
