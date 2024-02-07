@@ -12,6 +12,7 @@ Jenkins : it is process of automating the building and testing of code , each ti
  # Jenkins Master-Slave Architectire 
 
  Soruce code repository-----jenkis master pull the code every time when there is a commit ---> Jenkin Server(Master)
+ 
                                                                                                 |     |       |
                                                                                                 |     |       |
                                                                                       Jenkin Slave1  Slave2 Slave3
@@ -29,8 +30,9 @@ Master is the one who is talking to SCM (git).
 
 Two benefits of Jenkins master-slave architecture:
 
-Load distribution
-If master node crashes, then worker node will take care.
+* Load distribution
+
+* If master node crashes, then worker node will take care.
 
 Establish the connection b/w Jenkins master and slave using ssh 
   
