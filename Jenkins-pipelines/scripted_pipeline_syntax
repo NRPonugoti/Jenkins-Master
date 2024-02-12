@@ -1,0 +1,23 @@
+node {
+
+    stage('SCM-Checkout'){
+	    echo "I am in SCM-Checkout"
+	}
+    stage('Build'){
+	    echo "I am in Build step "
+	}
+    stage('Test'){
+	    echo "I am in test step"
+	}
+	stage('Deploy'){
+	    echo "I am in Deploy step"
+	}
+    stage('Archive'){
+	    echo "I am in Archive step"
+	}
+
+}
+
+go to jenkins 
+create job with pipeline 
+then go to pipeline ---------> pipeline script 
