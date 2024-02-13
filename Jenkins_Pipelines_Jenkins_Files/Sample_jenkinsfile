@@ -14,7 +14,7 @@ pipeline {
                     def gitRepoUrl = 'https://github.com/NRPonugoti/Jenkins-Master.git'
 
                     checkout([$class: 'GitSCM', 
-                        branches: [[name: '*/main']], 
+                        branches: [[name: '*/dev']], 
                         userRemoteConfigs: [[url: gitRepoUrl]], 
                         extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOption', noTags: false, shallow: true, depth: 1]]
                     ])
