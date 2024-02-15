@@ -2,6 +2,7 @@ Project :
 
 github ---> Jenkins build maven Proejct: maven ----build docker image--------->Docker  ----push the image to docker hub -----> Docker hub
 
+
 Step1: 
 Launch EC2 instacne 
 install java , maven , jenkins 
@@ -66,4 +67,72 @@ id:dockerhubpwd
 click add 
 click generate script 
 copy above like it :                   withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+
+
+
+
+then now you need to push this image to k8s 
+
+go to jenkins ----> manage plugins ----> kubenrate continue deploys ----> install it 
+
+if you want to downgrade this plug in :  kubenrate continue deploys
+then go to jenkins ----> manage plugins --->advance  ----> deploy plugin 
+
+provide it url 
+click deploy 
+
+then  started K8S minikubes 
+then 
+
+I need to sync my docker and K8s 
+go to minikube ec2 instance and run below commnad 
+#eval #(minikube -docker-env)
+#docker images 
+then 
+create deployment file in our application 
+then 
+go to pipleline script 
+add new stage like below 
+ go to groovy syntax
+then 
+select sample step: kubernatesDeploy deploy to kubenrate 
+then 
+kubeconfig:  select add 
+kind: kubenrates configurations
+ID: k8sconfigpwd
+kubeconfig:
+select 
+enter directly:
+where you get it key of jubeconfig 
+go to minikube 
+go to root user 
+#ls -al
+we can see something call .kube 
+#cd 'kube
+#cat config 
+copy this syntax and copy into enter directly:
+then 
+kubeconfig: select kubeconfig credentail 
+then generate pipeline 
+
+
+   stage('Deploy to k8s'){
+            steps{
+                script{
+                    kubernetesDeploy (configs: 'deploymentservice.yaml',kubeconfigId: 'k8sconfigpwd')
+                }
+
+then save it pipleline script and run pipelone 
+once done 
+then 
+go to minikube 
+check it 
+#Kubectl get deploy 
+#kubectl get pod 
+#kubectl get service 
+take clusterIp:ports
+
+to get the service url for minikube 
+#minikube service springoot-k8ssvc --url 
+#minikube service nameofservcie  --url 
 
