@@ -1,0 +1,43 @@
+SonarQube :
+create linx machine and  install all required documents 
+connect to sonar VM and run sonar server 
+#cd /opt/sonarqube-7.8/bin/linux-x86-64
+#sh sonar.sh start
+
+then go to root  user of VM Machine 
+#adduser sonarquebe 
+switch to user 
+#sudo su - sonarquebe
+then 
+download sonarquebe 
+#wget 
+then go to root user 
+install unzip 
+#yum install unzip 
+go back to sonarquebe user 
+#sudo su - sonarquebe
+then unzip 
+#unzip *
+then 
+#chmod -R 755 /home/sonarqube/sonarqube-9.4.0
+#chown -R sonarquebe:sonarquebe /home/sonarqube/sonarqube-9.4.0
+
+#cd /opt/sonarqube-7.8/bin/linux-x86-64
+then start sonar 
+#sh sonar.sh start
+
+sonar running port :9000
+publicip:9000
+default user name and password 
+admin
+admin
+create new password 
+now jenkins and sonarqube both are dirrent and how to communicate it 
+go to sonarqube -----> click my account ---> click security----> generate tokens : jenkins click generate 
+copy the tokne save it 
+
+go to jenkins  --- manage jenkins ------ credentails -------systems --global credentail ----add credentail ---kind: screet text 
+secret: provide token of sonarqube 
+id: sonarqube 
+save it 
+
