@@ -1,0 +1,69 @@
+Project :
+
+github ---> Jenkins build maven Proejct: maven ----build docker image--------->Docker  ----push the image to docker hub -----> Docker hub
+
+Step1: 
+Launch EC2 instacne 
+install java , maven , jenkins 
+launch jenkins GUI 
+create pipeline project in jenkins 
+then 
+select source code
+then
+select build trigger 
+then 
+select pipeline
+jenkinsfile created in github for action of each step 
+set maven tools :
+go to manage jenkins ----- tools configuration ---- set up maven 
+
+then set up maven build step in pipeline script
+
+then build it , it will get sucess 
+
+Step 2: you need to tell jenkins to build docker image 
+to build docker image ,your application should have dockerfile 
+then 
+create dockerfile in your appllication 
+then 
+go to jenkins ---manage jenkins ---tools 
+go to pipleline script 
+    stage('Build docker image'){
+            steps{
+                script{
+                    sh 'docker build -t narendra40/devops-integration .'
+                }
+devops-integration = image name 
+narendra40 = docker hub alias name 
+
+
+Step3 : push the docker image to docker hub 
+
+stage('Push image to Hub'){
+            steps{
+                script{
+                # log in to docker hub using withCredentials
+                   withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+                   sh 'docker login -u narendra04 -p ${dockerhubpwd}'
+
+}
+                   sh 'docker push narendra04/devops-integration'
+                }
+            }
+        }
+
+go to groovy syntax 
+select : withCredentials
+click add 
+select : secret text 
+variable : dockerhubpwd
+credentilas : 
+
+click add 
+kind: scret text 
+scret: password of docker hub
+id:dockerhubpwd
+click add 
+click generate script 
+copy above like it :                   withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+
