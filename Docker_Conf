@@ -1,0 +1,71 @@
+Docker configuration:
+
+go to jekins master 
+go to root user 
+then intall docker 
+
+#sudo yum install docker.io
+
+grant jenkins user and ubuntue user permisions to docker deamon 
+sudo su -
+usermod -aG docker jenkins 
+usermod -aG docker ubuntue 
+systemctl restart docker 
+
+put docker credential in jenkins master:
+manage jenkins ---> credential ----> sustems---->global credentail ---->
+kind: username and password 
+username: 
+password:
+id: docker_cred
+
+
+in our application , you need to create dockerfile 
+then build image 
+write stage in pipeline for build image 
+stage('Docker Image Build'){
+  step {
+       script{
+	       sh 'docker image build -t $JOB_NAME:v1:$BUILD_ID .'
+		   sh 'docker image tag $JOB_NAME:v1:$BUILD_ID  narendra04/$JOB_NAME:v1:$BUILD_ID'
+		   sh 'docker image tag $JOB_NAME:v1:$BUILD_ID  narendra04/$JOB_NAME:latest'
+
+	   }
+  }
+}
+
+push the image to docker hub 
+so you need credetail of docker to push image 
+so you have to store dockerhub credentail for jenkins 
+go to dashboard -----> click pipeline proejct ---> pipeline syntax 
+sample Step: withCredential :bind credentail to variable 
+Bindings:
+click ADD ---->Secret text 
+                 Variable: docker_hub_cred
+				 Credentails:git_cred
+				 then click ADD 
+				                    Kind: Secret text 
+									Scret: pasword of dockerhub 
+									ID: git_cred
+									Desc: git_cred
+									
+	select			Credentails:git_cred
+	generate it 
+
+									
+				 
+
+stage('push image to the dockerHub'){
+  step {
+       script{
+	       withCredential([string(credentialsId: 'git_cred', variable : 'docker_hub_cred')]){
+		   
+		         sh 'docker login -u narendra04 -p $(docker_hub_cred)
+				 sh 'docker image push narendra04/$JOB_NAME:v1:$BUILD_ID'
+				 sh 'docker image push narendra04/$JOB_NAME:latest'
+
+		   }
+	     
+	   }
+  }
+}
