@@ -1,16 +1,48 @@
+
+What is sonarQube : 
+Is open soruce Code analysis tool 
+sonarQube collects and analyzes soruce code , measure quality and providing reports for your project 
+and provide detailed code analysis reports
+Sonar qube offers reports on duplicate code , coding standards, unit tests , code coverage , code complexity , comments ,bugs,and security vu
+
+features of sonar qube :
+ centralize Quality rules : all compiney follow same rules all rules are same for every proejcts 
+continues inspection code :
+enforce quality gate : define thresholds for quality metrics to decide release  , unless untill you pass the quality 
+other wise it will not allow the code to pass next step
+Dig into issues : analyze in detial what the mainissue and where they are located 
+visualise history of proejct: 
+Devops integration 
+
+
+
 SonarQube is an open platform to manage code quality ,As such , it covers the 7axe of code quality 
+
+3 Major componets of sonar qube : 
+1.SonarQube scanner :  is used to identify which language code written and integrated to maven  and identify what is centrilized  set of rules on centrlize repository 
+and apply those rules to this proejct 
+2.Compute engine  it will evaluate your code against set of rules 
+takes care of processing code analysis report 
+saving the analysis report in database 
+3.Search Server elastic search :  which helps  you quickly  do the validation once validation done , it will go ahed and port into db base 
+
+Hardware requirment of sonar qube : 
+
+minimum 2GB RAM and 290GB storage 
 
 
 SonarQube :
 create linx machine and  install all required documents 
 CREATE THE EC2 MACHINE WITH T2.MEDIUM 
 SONARQUEBE DEFAULT PORT :9000
-OPEN THE PORT IN EC2 
+OPEN THE PORT IN EC2 using security group 
 
-then go to root  user of VM Machine 
+then go to root  user of EC2 Machine 
 #adduser sonarquebe 
 switch to user 
 #sudo su - sonarquebe
+then 
+run all commands on sonarqube user 
 then 
 #yum install java-1.8*  -y
 then
@@ -33,19 +65,73 @@ then start sonar
 #sh sonar.sh start
 
 sonar running port :9000
-publicip:9000
+http://publicip:9000
 default user name and password 
 admin
 admin
 create new password 
-now jenkins and sonarqube both are dirrent and how to communicate it 
+then 
+select java and maven 
+
 go to sonarqube -----> click my account ---> click security----> generate tokens : jenkins click generate 
 copy the tokne save it 
 
+if we want to change something of sonarqube like port number 
+got to config ----->sonar.properties
+
+now jenkins and sonarqube both are dirrent and how to communicate it 
+Launch Jenkin server : 
+then 
 install sonar qube plugin in jenkins 
+mange jenkins--->Plugin manager---->avaiable --->SonarQube Scanner----> instal it 
 
-mange jenkins--->Plugin manager---->avaiable --->Sonar Qube Scanner----> instal it 
+Then
+go to jenkins  --- manage jenkins ---> configure systems --->Sonarqube server  ----> SonarQube installation
+                                                                                  Name: sonar-server
+                                                                                  ServerUrl: url of sonar qube(GUI)
+                                                                                  server Authentication tokens: Click ADD
+                                                                                                                Kind: Secret text
+                                                                                                                Secret: token 
+                                                                                                                ID: sonar-token
+                                                                                                                Apply and Save 
+                                                                                  server Authentication tokens: select: sonar-token 
+click app;y and save it 
 
+THen go to golbal tool configuration 
+Manage Jenkins -----> GLobal tool configuration ------> SonarQube Scanner
+                   
+                    Name: sonar-scanner
+                    click install automatically 
+                   version: SonarQube Scanner 2.8
+apply and save it 
+
+then 
+go to pipleline syntax 
+Sample step: waitforQualityGate:Wait for sonarqube analysis to be completedand return quality gate status
+Server authentication token: sonar-token 
+
+configure webhook for waitforQualityGate in sonar qube GUI 
+
+go to sonar qube gui ----> adminstration ----> webhooks 
+                                              Name: jenkins-webhook
+                                              URL:idaddress of jenkins/sonarqube-webhook/
+then 
+stage("Sonar_Quality_test")
+steps {
+    withSonarQubeEnv('sonar-server'){   //configure systems --->Sonarqube serve ---Name: sonar-server
+      sh 'mvn sonar:sonar'
+}
+}
+stage("Quality Gate"){
+   steps {
+    timeout(time:1 , unit: 'HOURS') {
+          waitForQualityGate abortPipeline : true 
+}
+}
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
 go to jenkins  --- manage jenkins ------ credentails -------systems --global credentail ----add credentail ---kind: screet text 
 secret: provide token of sonarqube 
 id: sonarqube 
