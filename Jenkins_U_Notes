@@ -1,0 +1,6 @@
+Add Parameter in jenkins job 
+create pipeline job ----> click configure--->General --->this project is parameterized --Add parameter 
+and set parameter which parameter you want it then run the job 
+
+
+
