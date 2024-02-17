@@ -58,5 +58,73 @@ then executive it
 it should work 
 
 ====================================================================
+Buils Jenkins Docker agents 
+
+Usvally we use Jenkins Master and slave arch 
+1 Jenkins master and multiple Slave node 
+because of this approce , infrastructure cost maintainse increase 
+that's why i bought dockeragent as Slave node 
+if you are executing the jenkins executor with in the docker , because when eer job will execute it 
+it will spin up a new docker contianer and once it will finish job , it will terminate that docker contianer 
+so you are not reserving the reosuce , your machine and your executor are not in alwyas run conditon 
+creating docker agent is very helpful, it will save lot of infrastructre cost plus lot of infrastructor maintiance 
+
+how we can set upthe jenkins docker agent , whenever we will execute the job and we are defining that particuler jobs should 
+be executed on a specific agent 
+then how that agent will be docker agent insted of the persistent machine 
+
+1. create ec2 instance 
+2. install docker engine on ec2 instance ( search in google : docker install )
+3. we need to install jenkins 
+#docker run -d -p 8080:8080 -p 5000:5000 -v /root/jenkins_home:/var/jenkins_home -u root --name jenkins-slave jenkins/jenkins:lts
+p 8080:this port will expose on the host machine 
+ -p 8080:8080 - second 8080 will be docker port 
+-p 5000:5000 for agent comminication, docker slave comminication 
+v = will mount the mounte volume  , 
+/var/jenkins_home :we are mounte this volume from the container directory 
+
+execute this command , download jenkins and install it 
+
+https://ipaddres of ec2instance:8080
+get the password 
+#cat /root/jenkins_home/secrets/initialAdminPassword
+get the password 
+setup all 
+we are creating new container of the jenkins 
+
+let's see how we can create the jenkins build agent 
+
+Manage jenkins---plugins ---docker --install it 
+then restart jenkins  
+
+then 
+go to manage jenkins--->clouds --> Click new cloud ---cloud Name; docker-agent ---> select docker --->click create 
+then it will show 2 options 
+1.dokcer cloud details 
+Docker Host URI: unix:///var/run/docker.sock 
+then click test 
+getting an error because of below things 
+because of some configuration 
+go to ec2 instance 
+#cd /root/jenkins_home 
+#dokcer logs name_of_image 
+let's terminate our existing container 
+#docker rm -f name_of_contianer (jenkins-centos)
+#docker ps -a
+#ls 
+we still have jenkins configuratin 
+disable firewll 
+#sudo systemctl disable firewalld
+need to eable docker service
+#sudo systemctl enable --now docker 
+provide docker access to that particuler jenkns user 
+#sudo usermod -aG docker jenkins 
+#sudo chmod 666 /var/run/docker.sock
+then run this command 
+#docker run -d  -p 8080:8080 -p 5000:5000 -v /root/jenkins_home:/var/jenkins_home -u root 
+--name jenkins-centos  --privileged=true  -v /var/run/docker.sock:/var/run/docker.sock jenkins:jenkis:lts
+
+2. dokcer agent details 
+
 
 
