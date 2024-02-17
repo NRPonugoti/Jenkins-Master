@@ -3,7 +3,18 @@ Parameters in Jenkins
 
 Add Parameter in jenkins job 
 create pipeline job ----> click configure--->General --->this project is parameterized --Add parameter 
-and set parameter which parameter you want it then run the job 
+and set parameter which parameter you want it
+then 
+go to pipline script :
+   stages {
+        stage('Hello') {
+            steps {
+            echo " Hello my Name is $Name
+            }
+        }
+    }
+}
+then  save it and run the job 
 
 
 then 
