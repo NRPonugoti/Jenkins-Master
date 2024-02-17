@@ -1,6 +1,51 @@
+
+Parameters in Jenkins 
+
 Add Parameter in jenkins job 
 create pipeline job ----> click configure--->General --->this project is parameterized --Add parameter 
 and set parameter which parameter you want it then run the job 
 
+
+then 
+create script:testscript.sh in tmp folder 
+testscript.sh
+#!/bin/bash
+
+Name =$1
+Age=$2
+LastName=$3
+visible=$4
+
+if["$visible" = "true"] ; then
+        echo "hello I am $Name , and I am $Age Years old"
+else
+
+        echo "Please pass visible true"
+fi
+then 
+go to jenkins parameters setting 
+add extra Parameters 
+then save it 
+then 
+go to piplelinse script 
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+              script {
+                      sh "/tmp/testscript.sh  $Name $Age $LastName $visible "
+                }
+            }
+        }
+    }
+}
+
+
+then executive it 
+it should work 
+
+====================================================================
 
 
